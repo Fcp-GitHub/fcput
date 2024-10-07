@@ -1,5 +1,6 @@
-#include "..\vertex_buffer.hpp"
-#include <GLFW\glfw3.h>
+#include "../include/vertex_buffer.hpp"
+#include "../3rd_party/glfw/include/GLFW/glfw3.h"
+
 #include <iostream>
 
 int init();
@@ -11,7 +12,7 @@ int main(void)
   
   float data[] = {1.4, 1.5, 1.6};
   std::cout << "here\n";
-  VBO vbo; 
+  VBO<double> vbo; 
   std::cout << "here\n";
   std::cout << "vbo ID: " << vbo.ID() << '\n';
   

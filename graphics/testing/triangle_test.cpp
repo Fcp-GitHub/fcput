@@ -1,5 +1,5 @@
-#include "..\vertex_buffer.hpp"
-#include <GLFW/glfw3.h>
+#include "../include/vertex_buffer.hpp"
+#include "../3rd_party/glfw/include/GLFW/glfw3.h"
 
 #include <iostream>
 
