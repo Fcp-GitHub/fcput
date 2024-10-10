@@ -3,8 +3,6 @@
 
 #include "../3rd_party/glad/glad.h"
 
-//#include "error.hpp"
-
 // declare size_t type in order to avoid including entire headers. 
 using size_t = decltype(sizeof(0));	// taken from: https://en.cppreference.com/w/cpp/types/size_t
 

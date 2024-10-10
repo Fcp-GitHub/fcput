@@ -38,10 +38,22 @@ class EBO : public BufferObject
      */
     EBO(const EBO& other, const GLenum& buffer_usage = GL_STATIC_DRAW);
 
+		/* Move constructor.
+		 *
+		 * Generate a new EBO moving data to it.
+		 */
+		EBO(EBO&& other) noexcept;
+
     /* Copy the data of another EBO into this.
      */
     EBO& operator=(const EBO& other);
-    
+
+    /* Move assignment operator.
+		 *
+		 * Transfer ownership of EBO 'other' to the current one.
+		 */
+		EBO& operator=(EBO&& other) noexcept;
+
 		// Forward declaration (avoid possible compilation errors).
 		struct copy_args;
 #ifndef FCPUT_GRAPHICS_VERTEX_BUFFER

@@ -1,4 +1,6 @@
 #include "../include/vertex_buffer.hpp"
+#include "../include/error.hpp"
+
 /* VAO IMPLEMENTATION
  *******************************************************************************
  */
@@ -53,6 +55,12 @@ VBO::VBO(const VBO& other, const GLenum& buffer_usage): BufferObject(GL_ARRAY_BU
 	this->unbind();
 }
 
+VBO::VBO(VBO&& other) noexcept
+{
+	this->m_id = other.m_id;
+	other.m_id = 0;	// Convention: if VBO.m_id == 0 it cannot be accessed anymore (it doesn't refer to a GL object).
+}
+
 VBO& VBO::operator=(const VBO& other)
 {
 	if (this == &other) return *this;
@@ -67,6 +75,16 @@ VBO& VBO::operator=(const VBO& other)
 	glBindBuffer(GL_COPY_WRITE_BUFFER, this->m_id);
 	glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, size_of_other);
 	this->unbind();
+
+	return *this;
+}
+
+VBO& VBO::operator=(VBO&& other) noexcept
+{
+	if (this == &other) return *this;
+
+	this->m_id = other.m_id;
+	other.m_id = 0;	// Convention: if VBO.m_id == 0 it cannot be accessed anymore (it doesn't refer to a GL object).
 
 	return *this;
 }
@@ -120,6 +138,10 @@ void VBO::setData(const size_t& size_of_data, const void* data, const GLenum& bu
 
 void VBO::formatVertexAttribute(const GLuint& index, const GLint& number_of_components, const GLsizei& stride, const void* offset, const formatVertexAttribute_args& args)
 {
-	glVertexAttribPointer(index, number_of_components, args.data_type, args.is_normalized, stride, (void*)offset);
-	glEnableVertexAttribArray(index);
+	if (this->m_id != 0)
+	{
+		glVertexAttribPointer(index, number_of_components, args.data_type, args.is_normalized, stride, (void*)offset);
+		glEnableVertexAttribArray(index);
+	} else
+		throw fcp::bad_binding_error();
 }

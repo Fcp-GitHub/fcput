@@ -26,6 +26,12 @@ EBO::EBO(const EBO& other, const GLenum& buffer_usage): BufferObject(GL_ELEMENT_
   this->unbind();
 }
 
+EBO::EBO(EBO&& other) noexcept
+{
+	this->m_id = other.m_id;
+	other.m_id = 0;	// Convention: if EBO.m_id == 0 it cannot be accessed anymore (it doesn't refer to a GL object).
+}
+
 EBO& EBO::operator=(const EBO& other)
 {
  if (this == &other) return *this;
@@ -42,6 +48,16 @@ EBO& EBO::operator=(const EBO& other)
  this->unbind();
  
  return *this;
+}
+
+EBO& EBO::operator=(EBO&& other) noexcept
+{
+	if (this == &other) return *this;
+
+	this->m_id = other.m_id;
+	other.m_id = 0;	// Convention: if EBO.m_id == 0 it cannot be accessed anymore (it doesn't refer to a GL object).
+	
+	return *this;
 }
 
 void EBO::copyTo(const EBO& other, const copy_args& args)

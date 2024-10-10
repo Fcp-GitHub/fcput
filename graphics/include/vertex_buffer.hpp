@@ -25,6 +25,12 @@ class VAO
 		 */
     ~VAO();
 
+		// Do not allow copy and move semantics for this partiicular class, since they wouldn't make much sense here.
+		VAO(const VAO&) = delete;
+		VAO& operator=(const VAO&) = delete;
+		VAO(VAO&&) = delete;
+		VAO& operator=(VAO&&) = delete;
+
     /* Bind this VAO to the current OpenGL context.
 		 *
      * In other words, from now on all subsequent vertex attribute calls will be 
@@ -77,10 +83,23 @@ class VBO : public BufferObject
      */
     VBO(const VBO& other, const GLenum& buffer_usage = GL_STATIC_DRAW);
 		
-    /* Copy the data of another VBO into this.
+		/* Move constructor.
+		 *
+		 * Generate a new VBO moving data to it.
+		 */
+		VBO(VBO&& other) noexcept;
+
+    /* Copy assignment operator.
+		 *
+		 * Copy the data of another VBO into this.
      */
     VBO& operator=(const VBO& other);
 
+		/* Move assignment operator.
+		 *
+		 * Transfer ownership of VBO 'other' to the current one.
+		 */
+		VBO& operator=(VBO&& other) noexcept;
    
 		// Optional arguments for copy methods.
 		struct copy_args{

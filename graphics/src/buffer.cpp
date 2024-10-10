@@ -1,4 +1,5 @@
 #include "../include/buffer.hpp"
+#include "../include/error.hpp"
 
 BufferObject::BufferObject(GLenum target): m_target{target}
 {
@@ -13,12 +14,15 @@ BufferObject::~BufferObject()
 
 void BufferObject::dispose()
 {
-	glDeleteBuffers(1, &m_id);
+	if (m_id != 0)
+		glDeleteBuffers(1, &m_id);
 }
 
 void BufferObject::bind() const
 {
-	glBindBuffer(m_target, m_id);
+	if (m_id != 0)
+		glBindBuffer(m_target, m_id);
+	else throw fcp::bad_binding_error();
 }
 
 void BufferObject::unbind() const
@@ -33,11 +37,15 @@ const GLuint& BufferObject::ID() const
 
 void BufferObject::allocateMemory(GLsizeiptr size_of_data, const allocateMemory_args args)
 {
-	glBufferData(m_target, size_of_data, args.data, args.usage);
+	if (m_id != 0)
+		glBufferData(m_target, size_of_data, args.data, args.usage);
+	else throw fcp::bad_binding_error();
 }
 
 void BufferObject::updateMemory(const GLintptr& from_byte, const size_t& size_of_data, const void* data)
 {
-	glBufferSubData(m_target, from_byte, size_of_data, &data);
+	if (m_id != 0)
+		glBufferSubData(m_target, from_byte, size_of_data, &data);
+	else throw fcp::bad_binding_error();
 }
 
