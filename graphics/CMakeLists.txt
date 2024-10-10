@@ -7,29 +7,33 @@ set(FCPUT_GRAPHICS_DIR ${CMAKE_CURRENT_LIST_DIR})
 
 # Source and header files.
 
+# Generic buffer header
+add_library(buffer src/buffer.cpp)
+target_include_directories(buffer INTERFACE include)
+target_link_libraries(buffer PUBLIC compiler_flags)
+
 # VAO and VBO
 add_library(vbo src/vertex_buffer.cpp)
 target_include_directories(vbo INTERFACE include)
-target_link_libraries(vbo PUBLIC compiler_flags)
+target_link_libraries(vbo PUBLIC buffer compiler_flags)
 
 # EBO
 add_library(ebo src/element_buffer.cpp)
 target_include_directories(ebo INTERFACE include)
-target_link_libraries(ebo PUBLIC compiler_flags)
+target_link_libraries(ebo PUBLIC buffer compiler_flags)
 
 
 # Single header files.
-
-# Generic buffer header
-add_library(buffer INTERFACE)
-target_include_directories(buffer INTERFACE include)
-target_link_libraries(buffer INTERFACE compiler_flags)
 
 # Mesh
 add_library(mesh INTERFACE)
 target_include_directories(mesh INTERFACE include)
 target_link_libraries(mesh INTERFACE compiler_flags)
 
+# Error library
+add_library(errors INTERFACE)
+target_include_directories(errors INTERFACE include)
+target_link_libraries(errors INTERFACE compiler_flags)
 
 # Third party libraries.
 

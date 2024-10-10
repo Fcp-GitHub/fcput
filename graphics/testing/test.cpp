@@ -12,11 +12,12 @@ int main(void)
   
   float data[] = {1.4, 1.5, 1.6};
   std::cout << "here\n";
-  VBO<double> vbo; 
+	//std::vector<VBO> vbo = {VBO()}; 
+	VBO vbo[1] = {VBO()};
   std::cout << "here\n";
-  std::cout << "vbo ID: " << vbo.ID() << '\n';
-  
-  glfwTerminate();
+  std::cout << "vbo ID: " << vbo[0].ID() << '\n';
+  vbo[0].dispose();
+	glfwTerminate();
   return 0;
 }
 

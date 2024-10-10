@@ -1,0 +1,37 @@
+# Out-of-tree build and testing subdirectories
+build
+testing
+
+# Other files
+TODO.txt
+REMEMBER_ME.txt
+git_msg
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
+cmake_install.cmake
+cmake_uninstall.cmake
+
+# Generated Makefile
+Makefile
+
+# Visual Studio's mess
+_ReSharper*
+*.sdf
+*.suo
+*.dir
+*.vcxproj*
+*.sln
+.vs
+CMakeSettings.json
+Win32
+x64
+Debug
+Release
+MinSizeRel
+RelWithDebInfo
+*.opensdf

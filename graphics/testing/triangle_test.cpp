@@ -2,6 +2,7 @@
 #include "../3rd_party/glfw/include/GLFW/glfw3.h"
 
 #include <iostream>
+#include <vector>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -107,17 +108,17 @@ int main()
 
     // Create VAO and VBO through classes
     // 1. Generate buffer objects
-    VAO vao; VBO<float> vbo;
+    VAO vao; VBO vbo(sizeof(float) * vertices.size(), vertices.data());
     // Insert data right away
-    VBO<float> vbo1(vertices);
+    VBO vbo1(sizeof(float) * vertices.size(), vertices.data());
     // Copy constructor 
-    VBO<float> vbo2(vbo1);
+    VBO vbo2(vbo1);
     //// 2. Bind the VAO
     vao.bind();
     //// 3. Bind and set VBO
     vbo = vbo1; // copy data of vbo1
     //// 4. Configure vertex attributes
-    vbo.formatVertexAttribute(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+		vbo.formatVertexAttribute(0, 3, 3 * sizeof(float), 0);
     //// 5. Optionally, unbind both
     //vbo.unbind();
     //vao.unbind();

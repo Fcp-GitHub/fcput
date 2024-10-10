@@ -3,10 +3,7 @@
 
 #include "buffer.hpp"
 
-#include <vector>
-
-/*
- * Vertex Array Object.
+/* Vertex Array Object.
  *
  * OpenGL buffer object that stores all the required information (state) to supply vertex data. 
  */ 
@@ -16,37 +13,34 @@ class VAO
     GLuint m_id;
 
   public:
-    /*
-     * Default constructor.
+    /* Default constructor.
      * 
      * Create a Vertex Array Object.
      */
     VAO();
 
-		/*
-		 * Default destructor.
+		/* Default destructor.
 		 *
 		 * Destroy the Vertex Array Object.
 		 */
     ~VAO();
 
-    /*
-     * Bind this VAO to the current OpenGL context.
+    /* Bind this VAO to the current OpenGL context.
+		 *
      * In other words, from now on all subsequent vertex attribute calls will be 
-     * stored / will affect the current VAO. 
+     * stored \ will affect the current VAO. 
      */
     void bind();
 
-    /*
-     * Unbind this VAO from the current OpenGL context.
+    /* Unbind this VAO from the current OpenGL context.
      */
     void unbind();
 
-    /*
-     * Get the ID of this VAO.
+    /* Get the ID of this VAO.
      */
-    GLuint ID();
-};
+    const GLuint& ID() const;
+
+};	// end of VAO class.
 
 /* Vertex Buffer Object (VBO).
  *
@@ -58,158 +52,71 @@ class VAO
  * Technically, VBOs offer a substantial increase in performance compared with the old OpenGL's 
  * 'immediate rendering mode'.
  */
-template <typename T>
-class VBO : public BufferObject<T>
+class VBO : public BufferObject
 {
   public:
-    /*
-     * Empty constructor. 
+
+    /* Empty constructor. 
      * 
      * Generate a non-initialized VBO object.
      */
-    VBO(): BufferObject<T>(GL_ARRAY_BUFFER) {}
+    VBO(): BufferObject(GL_ARRAY_BUFFER) {}
 
-    /*
-     * Generate and initialize a VBO object with the given array of vertices.
+    /* Generate and initialize a VBO object with the given array of vertices.
+		 *
      * The default argument 'buffer_usage' can be used to directly specify 
      * any of the following values: STREAM_DRAW, STREAM_READ, STREAM_COPY, 
      * STATIC_DRAW, STATIC_READ, STATIC_COPY, DYNAMIC_DRAW, DYNAMIC_READ, 
      * DYNAMIC_COPY.
      */
-    VBO(const std::vector<T>& data, GLenum buffer_usage = GL_STATIC_DRAW): BufferObject<T>(data, GL_ARRAY_BUFFER)
-    {
-      this->bind();
-      glBufferData(this->m_target, data.size() * sizeof(T), &data.front(), buffer_usage);
-      this->unbind();  // Allow code like: 'vbo1 = VBO(data);' to be possible without breaking the state machine with dangling bindings.
-    }
+    VBO(const size_t& size_of_data, const void* data, const GLenum& buffer_usage = GL_STATIC_DRAW);
 
-    /*
-     * Copy constructor.
+    /* Copy constructor.
      *
      * Generate another VBO object with the same stored data as 'other'.
      */
-    VBO(const VBO<T>& other, GLenum buffer_usage = GL_STATIC_DRAW): BufferObject<T>(other.m_data, GL_ARRAY_BUFFER)
-    {
-      this->bind();
-      glBufferData(this->m_target, this->m_data.size() * sizeof(T), &this->m_data.front(), buffer_usage);
-      this->unbind();  // Allow code like: 'vbo1 = VBO(data);' to be possible without breaking the state machine with dangling bindings.
-    }
-
-    /*
-     * Copy the data of another VBO into this.
-     *
-     * If the left buffer is empty it needs to be bound before using this operator!
-     * If the left buffer is not empty it is not mandatory to bind it before using this operator.
-     * 
-     * At the end of its operations this operator leaves the left buffer bound to GL_ARRAY_BUFFER!
+    VBO(const VBO& other, const GLenum& buffer_usage = GL_STATIC_DRAW);
+		
+    /* Copy the data of another VBO into this.
      */
-    VBO& operator= (const VBO<T>& other)
-    {
-      if (this == &other) return *this;
-      
-      if (this->m_data.empty())
-      {
-        // The user must have bound the buffer object before.
-        glBufferData(this->m_target, other.m_data.size() * sizeof(T), &other.m_data.front(), GL_STATIC_DRAW);
-      } else {
-        glBindBuffer(GL_COPY_READ_BUFFER, other.m_id);
-        glBindBuffer(GL_COPY_WRITE_BUFFER, this->m_id);
-        glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, 0, 0, other.m_data.size() * sizeof(T));
-        this->bind(); // assuming that the VBO was bound before the call to this method
-      }
+    VBO& operator=(const VBO& other);
 
-      return *this;
-    }
+   
+		// Optional arguments for copy methods.
+		struct copy_args{
+			GLintptr read_from;
+			GLintptr write_from;
+			GLsizeiptr size_data_to_copy;
+		
+			copy_args(): read_from{0}, write_from{0}, size_data_to_copy{0} {}
+		};
 
-    /*
-     * Copy the data of the current VBO into another one.
-     *
-     * At the end of this method neither of the two employed buffer objects are bound to the GL_ARRAY_BUFFER target.
+   /* Copy the data of the current VBO into another one.
+    */
+   void copyTo(const VBO& other, const copy_args& args = copy_args());
+
+    /* Copy the data of another VBO into this one.
      */
-    void copyTo(const VBO<T>& other, GLintptr read_from = 0, GLintptr write_from = 0, GLsizeiptr size_of_data = 0)
-    {
-      if (this == &other)
-        return;
+    void copyFrom(const VBO& other, const copy_args& args = copy_args());
 
-      if (size_of_data == 0)
-        size_of_data = this->m_data.size() * sizeof(T);
-
-      glBindBuffer(GL_COPY_READ_BUFFER, this->m_id);
-      glBindBuffer(GL_COPY_WRITE_BUFFER, other.m_id);
-      glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, read_from, write_from, size_of_data);
-      return;
-    }
-
-    /*
-     * Copy the data of another VBO into this one.
-     *
-     * At the end of this method neither of the two employed buffer objects are bound to the GL_ARRAY_BUFFER target.
+    /* Set VBO data and optionally its usage.
      */
-    void copyFrom(const VBO<T>& other, GLintptr read_from = 0, GLintptr write_from = 0, GLsizeiptr size_of_data = 0)
-    {
-      if (this == &other)
-        return;
-        
-      if (size_of_data == 0)
-        size_of_data = other.m_data.size() * sizeof(T);
+    void setData(const size_t& size_of_data, const void* data, const GLenum& buffer_usage = GL_STATIC_DRAW);
 
-      glBindBuffer(GL_COPY_READ_BUFFER, other.m_id);
-      glBindBuffer(GL_COPY_WRITE_BUFFER, this->m_id);
-      glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, read_from, write_from, size_of_data);
-      return;
-    }
+		// Optional arguments for the vertex attribut format method. 
+   	struct formatVertexAttribute_args{
+			GLenum data_type;
+			GLboolean is_normalized;
 
-    /*
-     * Set VBO data and optionally its usage.
-     *
-     * The buffer has to be bound before this operation!
-     */
-    void setData(const std::vector<T>& data, GLenum buffer_usage = GL_STATIC_DRAW)
-    {
-      this->m_data = data;
-      glBufferData(this->m_target, data.size() * sizeof(T), &data.front(), buffer_usage);
-    }
-
-    /*
+			formatVertexAttribute_args(): data_type{GL_FLOAT}, is_normalized{GL_FALSE} {}
+		};
+    
+		/* Format vertex attribute.
+		 *
      * Format some vertex data in order to set how the vertex shader should interpret it (per vertex attribute).
-     *
-     * The buffer has to be bound before this operation!
      */
-    void formatVertexAttribute(GLuint index, GLint number_of_components, GLenum data_type, GLboolean is_normalized, GLsizei stride, const void* offset)
-    {
-      glVertexAttribPointer(index, number_of_components, data_type, is_normalized, stride, (void*)(offset));
-      glEnableVertexAttribArray(index);
-    }
+		void formatVertexAttribute(const GLuint& index, const GLint& number_of_components, const GLsizei& stride, const void* offset, const formatVertexAttribute_args& args = formatVertexAttribute_args());
 
-    /*
-     * Bind this buffer object to the current OpenGL context.
-     */
-    void bind() const
-    {
-      GLint currentlyBoundVBO; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &currentlyBoundVBO);
-      if (currentlyBoundVBO != this->m_id)  // avoid binding repetition.
-        BufferObject<T>::bind();
-    }
-
-    /*
-     * Unbind this buffer object from the current OpenGL context.
-     */
-    void unbind() const
-    {
-      GLint currentlyBoundVBO; glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &currentlyBoundVBO);
-      if (currentlyBoundVBO == this->m_id)  // avoid unbinding repetition.
-        BufferObject<T>::unbind();
-    }
-
-    /*
-     * Get the data that is currently stored in the buffer.
-     *
-     * The buffer needs not to be bound before calling this method.
-     */
-    std::vector<T> getData() const
-    {
-      return this->m_data;
-    }
-};
+};	// end of VBO class.
 
 #endif  // FCPUT_GRAPHICS_VERTEX_BUFFER
