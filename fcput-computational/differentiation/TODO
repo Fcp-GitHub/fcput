@@ -1,0 +1,14 @@
+For now I'm sticking to <=C++17 code.
+
+1. Move lookup tables and internal differentiation methods into the appropriate `internal` 
+	namespace (out of any class)
+2. Refine already-existing class renaming it "InPlaceDifferentiation" or something better sounding
+	and define a similar "StorageDifferentiation" class that saves data in an internal buffer 
+3. See if template parameter `Grid` can be adjusted considering that a 'Grid` object is passed
+	to the constructor
+
+Different kinds of Differentiate classes. They could be separated by storage system.
+
+For better performance:
+	Implement caching system that saves only recurrent, or likely-recurrent, data
+	Implement debug mode in order to avoid some runtime checkings during release runs

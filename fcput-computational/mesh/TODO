@@ -1,0 +1,3 @@
+Make two types of `UniformGrid`: an inplace one and one with internal storage
+
+Iterators
