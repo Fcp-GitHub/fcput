@@ -1,0 +1,25 @@
+basic_bitmap:
+	SUCCESS - init list constructor
+	SUCCESS - single value constructor 
+	SUCCESS - flip (ctime)
+	SUCCESS - flip (rtime)
+	SUCCESS - at (ctime)
+	SUCCESS - at (rtime) 
+	SUCCESS - flip_all
+	SUCCESS - set
+	SUCCESS - set_all (ctime)
+	SUCCESS - set_all (rtime)
+
+Bitmap:
+	SUCCESS - CHECK SIZE OF BITMAP
+	SUCCESS - FCP_COMPUTE_BYTES value
+	SUCCESS - init list constructor
+	SUCCESS - single value constructor
+	SUCCESS - flip (ctime)
+	SUCCESS - flip (rtime)
+	SUCCESS - at (ctime)
+	SUCCESS - at (rtime)
+	SUCCESS - flip_all
+	SUCCESS - set_all (ctime)
+	SUCCESS - set_all (rtime)
+	SUCCESS - std::ostream& operator<<(std::ostream&,const fcp::algods::Bitmap&)

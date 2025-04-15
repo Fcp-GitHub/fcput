@@ -1,9 +1,34 @@
 # Graphics top CMakeLists.txt
 #
 # Add the libraries to be built.
+cmake_minimum_required(VERSION 3.10)
+
+project(
+	graphics
+	DESCRIPTION "Utilities for graphical tasks (color space conversions, mesh rendering, ...)"
+	LANGUAGES C CXX
+)
+
+# Check if top level.
+if(PROJECT_IS_TOP_LEVEL)
+	# Support folders in IDEs.
+	set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+	# Enable docs generation.
+	find_package(Doxygen)
+	if(Doxygen_FOUND)
+		add_subdirectory(docs)
+	else()
+		message(STATUS "Doxygen not found, documentation won't be built.")
+	endif()
+endif()
 
 # Remember current working directory.
 set(FCPUT_GRAPHICS_DIR ${CMAKE_CURRENT_LIST_DIR})
+
+# Add requirements and features
+add_library(compiler_flags INTERFACE)
+target_compile_features(compiler_flags INTERFACE cxx_std_17)
 
 # Source and header files.
 

@@ -19,7 +19,8 @@ class BufferObject
 
     ~BufferObject();
 
-		/* Destroy the underlying buffer object.
+		/*
+		 * Destroy the underlying buffer object.
 		 */
 		void dispose();
     

@@ -40,8 +40,8 @@ class Mesh
     std::vector<GLuint> m_indices;
 
     VAO m_vao;
-    VBO<T> m_vbo;
-    EBO<T> m_ebo;
+    VBO m_vbo;
+    EBO m_ebo;
 
     TOPOLOGY m_topology{ TRIANGLES };
 

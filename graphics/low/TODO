@@ -1,0 +1,8 @@
+Here are stored the files for the implementation of the lower "layer":
+100% compatible interfaces to the lower-level APIs.
+
+Helper functionalities that are closer to the original APIs (= depend
+on intrinsic mechanisms of a specific API) have to be defined here.
+
+These should be thin wrappers (= adding as little overhead as possible 
+while improving ease of use and intuitiveness) of the original functionalities.

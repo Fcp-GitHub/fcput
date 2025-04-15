@@ -1,0 +1,7 @@
+Common templated interface:
+	- the compiler flags determine the actual headers / ISA extensions used
+	- dynamic choice of ISA extension ?
+	- the template arguments determine the actual SIMD types used
+
+If an ISA extension has more features than the others, some common interface must be
+equally defined. 

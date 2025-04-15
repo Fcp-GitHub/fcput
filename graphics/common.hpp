@@ -1,0 +1,15 @@
+#ifndef FCPUT_GRAPHICS
+#define FCPUT_GRAPHICS
+
+#define FCP_NAMESPACE_BEGIN namespace fcp {
+#define FCP_NAMESPACE_END }
+
+#define FCP_GRAPHICS_NAMESPACE_BEGIN namespace graphics {
+#define FCP_GRAPHICS_NAMESPACE_END }
+
+#define FCP_GRAPHICS_LOWER_NAMESPACE_BEGIN namespace lower {
+#define FCP_GRAPHICS_LOWER_NAMESPACE_END }
+
+#define FCPUT_GRAPHICS_API 
+
+#endif	// FCPUT_GRAPHICS

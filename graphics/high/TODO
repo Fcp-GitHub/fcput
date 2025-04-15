@@ -1,0 +1,6 @@
+Here are stored the files for the implementation of a high-level graphics library, 
+possibly implemented using the low-level API ? This should be tested, it may make 
+implementation easier as well as add complexity to the codebase. Furthermore (and 
+most of all), it should not add performance overhead! 
+
+The higher interface should be API-AGNOSTIC.

@@ -1,0 +1,10 @@
+#ifndef FCPUT_ALGODS_COMMON
+#define FCPUT_ALGODS_COMMON
+
+#define FCP_NAMESPACE_BEGIN namespace fcp {
+#define FCP_NAMESPACE_END }
+
+#define FCP_NAMESPACE_ALGODS_BEGIN namespace algods {
+#define FCP_NAMESPACE_ALGODS_END }
+
+#endif  // FCPUT_ALGODS_COMMON

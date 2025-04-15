@@ -12,8 +12,9 @@ project(fcput
 # Make sure that OpenGL basic libraries are found.
 find_package(OpenGL REQUIRED)
 
-# Add requirements and features
-add_library(compiler_flags INTERFACE)
-target_compile_features(compiler_flags INTERFACE cxx_std_17)
+# Add requirements and features (better to define them in single subdirectories).
+#add_library(compiler_flags INTERFACE)
+#target_compile_features(compiler_flags INTERFACE cxx_std_17)
 
 add_subdirectory(graphics)	# Name of subproject 1
+add_subdirectory(computational)	# Name of subproject 2

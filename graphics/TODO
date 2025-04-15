@@ -1,0 +1,10 @@
+Make library interfaces as implementation/API-agnostic as possible.
+This allows for different "server" implementations for the same "client" code.
+In the future, the same code should be run entirely using Vulkan or DirectX instead
+of OpenGL. Maybe a "two-layer" implementation should be done:
+- The first layer would be an implementation of helper functions and classes
+  for a particular API.
+- The second and "higher" layer would be for the actual client code of more common use.
+  This would probably be developed using the first layer too.
+
+All the other libraries and programs should be helped by these helper functionalities.

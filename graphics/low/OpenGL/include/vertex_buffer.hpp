@@ -25,7 +25,7 @@ class VAO
 		 */
     ~VAO();
 
-		// Do not allow copy and move semantics for this partiicular class, since they wouldn't make much sense here.
+		// Do not allow copy and move semantics for this particular class, since they wouldn't make much sense here.
 		VAO(const VAO&) = delete;
 		VAO& operator=(const VAO&) = delete;
 		VAO(VAO&&) = delete;

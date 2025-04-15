@@ -1,0 +1,14 @@
+Struct of Arrays with aligned memory (container).
+	Should contain a vector with all the arrays of data aligned. 
+	Should provide some accessor methods and setters too.
+	In order to do something like this, a GENERIC (~~<std::array<T,N>,...>) 
+	vector should be defined with the aligned allocator
+	(that should be implemented as well).
+
+A SoA is based on data usage patterns, but these could vary in the same program.
+Maybe one time calculations are done comparing along one axis at a time (eg. the 
+distance between two points, where all `x`s have to be summed, then the `y`s, etc.)
+and an other time they're done using components from all the system's axes
+(eg. a vector field that cannot be solved by separation of variables).
+Therefore, either make the user choose what data to store or make some kind of dynamic
+storage type.
